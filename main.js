@@ -12,8 +12,15 @@ loadTasksBtn.addEventListener('click', async () =>
     {
         const rawTasks = await fetchTasks();
         
-        console.log("Tasks fetched:", rawTasks);
-        statusMessage.textContent = "Tasks fetched successfully (Ready for JSON process).";
+        const jsonString = JSON.stringify(rawTasks);
+        const parsedData = JSON.parse(jsonString);
+        
+        const taskInstances = parsedData.map(t => new Task(t.id, t.title, t.completed));
+        
+        taskManager.setTasks(taskInstances);
+        console.log("Task instances ready in TaskManager:", taskManager.tasks);
+        
+        statusMessage.textContent = "Data processed. Ready to render.";
         
     } catch (error) 
     {
