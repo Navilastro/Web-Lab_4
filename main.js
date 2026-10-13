@@ -17,10 +17,9 @@ loadTasksBtn.addEventListener('click', async () => {
         const taskInstances = parsedData.map(t => new Task(t.id, t.title, t.completed));
         
         taskManager.setTasks(taskInstances);
-        
         renderTasks();
         
-        statusMessage.textContent = "";
+        statusMessage.textContent = ""; 
     } catch (error) 
     {
         statusMessage.textContent = "Error fetching tasks.";
@@ -29,7 +28,7 @@ loadTasksBtn.addEventListener('click', async () => {
 
 function renderTasks() 
 {
-    taskList.innerHTML = '';
+    taskList.innerHTML = ''; 
     
     taskManager.tasks.forEach(task => {
         const taskDiv = document.createElement('div');
@@ -44,9 +43,17 @@ function renderTasks()
         
         const toggleBtn = document.createElement('button');
         toggleBtn.textContent = 'Toggle';
+        toggleBtn.addEventListener('click', () => {
+            taskManager.toggleTask(task.id);
+            renderTasks(); 
+        });
         
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', () => {
+            taskManager.removeTask(task.id);
+            renderTasks(); 
+        });
         
         taskDiv.appendChild(titleSpan);
         taskDiv.appendChild(toggleBtn);
