@@ -4,8 +4,7 @@ const taskList = document.getElementById('taskList');
 
 const taskManager = new TaskManager();
 
-loadTasksBtn.addEventListener('click', async () => 
-    {
+loadTasksBtn.addEventListener('click', async () => {
     statusMessage.textContent = "Loading tasks...";
     
     try 
@@ -18,12 +17,40 @@ loadTasksBtn.addEventListener('click', async () =>
         const taskInstances = parsedData.map(t => new Task(t.id, t.title, t.completed));
         
         taskManager.setTasks(taskInstances);
-        console.log("Task instances ready in TaskManager:", taskManager.tasks);
         
-        statusMessage.textContent = "Data processed. Ready to render.";
+        renderTasks();
         
+        statusMessage.textContent = "";
     } catch (error) 
     {
         statusMessage.textContent = "Error fetching tasks.";
     }
 });
+
+function renderTasks() 
+{
+    taskList.innerHTML = '';
+    
+    taskManager.tasks.forEach(task => {
+        const taskDiv = document.createElement('div');
+        taskDiv.className = 'task';
+        if (task.completed) 
+        {
+            taskDiv.classList.add('completed');
+        }
+        
+        const titleSpan = document.createElement('span');
+        titleSpan.textContent = task.title;
+        
+        const toggleBtn = document.createElement('button');
+        toggleBtn.textContent = 'Toggle';
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        
+        taskDiv.appendChild(titleSpan);
+        taskDiv.appendChild(toggleBtn);
+        taskDiv.appendChild(deleteBtn);
+        taskList.appendChild(taskDiv);
+    });
+}
